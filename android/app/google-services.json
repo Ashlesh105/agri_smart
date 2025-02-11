@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "748763284882",
+    "project_id": "agri-smart-77b3c",
+    "storage_bucket": "agri-smart-77b3c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748763284882:android:74a5180546b69eac052d4b",
+        "android_client_info": {
+          "package_name": "com.example.agri_smart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMnCJlpSpRd5KYiiysfS9Lp3GJJxXTcAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
