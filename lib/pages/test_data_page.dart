@@ -32,14 +32,17 @@ class _TestHistoryScreenState extends State<TestHistoryScreen> {
 
     if (isOnline) {
       try {
-        final snapshot = await FirebaseFirestore.instance.collection('soilData').get();
+        final snapshot =
+            await FirebaseFirestore.instance.collection('soilData').get();
 
         await box.clear();
         for (var doc in snapshot.docs) {
           box.add({'id': doc.id, ...doc.data()});
         }
 
-        return snapshot.docs.map((doc) => {'id': doc.id, ...doc.data()}).toList();
+        return snapshot.docs
+            .map((doc) => {'id': doc.id, ...doc.data()})
+            .toList();
       } catch (e) {
         return _getHiveData(box);
       }
@@ -133,10 +136,42 @@ class _TestHistoryScreenState extends State<TestHistoryScreen> {
                 final test = dataList[index];
                 return Container(
                   margin: EdgeInsets.only(bottom: 8),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),border: Border.all(color: Colors.black)),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.black)),
                   child: ListTile(
                     title: Text('Test on ${test['timestamp']}'),
                     onTap: () => showDetails(test),
+                    trailing: IconButton(
+                        onPressed: () async {
+                          bool? confirm = await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Confirm Deletion'),
+                              content: Text('Are you sure you want to delete this test?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, false),
+                                  child: Text('No'),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: Text('Yes'),
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (confirm == true) {
+                            await FirebaseFirestore.instance.collection('soilData').doc(test['id']).delete();
+                            await Hive.box('hive_boxes').deleteAt(index);
+                            setState(() {});
+                          }
+                        },
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.redAccent,
+                        )),
                   ),
                 );
               },
